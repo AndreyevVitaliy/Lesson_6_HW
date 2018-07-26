@@ -77,6 +77,11 @@ if __name__ == '__main__':
     list_file = list()
     while True:
         user_string = input("Введите строку поиска: ")
+        if user_string.lower() == 'q':
+            break
+
         list_file = look_for(path_migrations, list_file, user_string)
+
+
 
 
