@@ -41,46 +41,39 @@ migrations = 'Migrations'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 path_migrations = os.path.join(current_dir, migrations)
 
-if __name__ == '__main__':
 
-    def look_for(path_dir, list_file, user_string):
-        new_file_list = list()
-        if not list_file:
-
-            for root, dirs, files in os.walk(path_dir):
-
-                for file_name in files:
-
-                    if file_name.endswith(".sql"):
-                        path_file = os.path.join(path_dir, file_name)
-
-                        with open(path_file, "r") as file:
-                            file_read = file.read()
-
-                            if user_string in file_read:
-                                new_file_list.append(path_file)
-                                print(path_file)
-        else:
-            for file_name in list_file:
-
-                with open(file_name, "r") as file:
-                    file_read = file.read()
-
-                    if user_string in file_read:
-                        new_file_list.append(file_name)
-                        print(file_name)
-
-        print(new_file_list.__len__())
-        return new_file_list
+def read_file(path_dir,file_name, new_file_list, user_string):
+    path_file = os.path.join(path_dir, file_name)
+    with open(path_file, "r") as file:
+        file_read = file.read()
+        if user_string in file_read:
+            new_file_list.append(path_file)
+            print(path_file)
 
 
-    list_file = list()
-    while True:
-        user_string = input("Введите строку поиска: ")
-        if user_string.lower() == 'q':
-            break
+def look_for(path_dir, list_file, user_string):
+    new_file_list = list()
+    if not list_file:
+        for root, dirs, files in os.walk(path_dir):
+            for file_name in files:
+                if file_name.endswith(".sql"):
+                    read_file(path_dir, file_name, new_file_list, user_string)
 
-        list_file = look_for(path_migrations, list_file, user_string)
+    else:
+        for file_name in list_file:
+            read_file(path_dir, file_name, new_file_list, user_string)
+
+    print(len(new_file_list))
+    return new_file_list
+
+
+list_file = list()
+while True:
+    user_string = input("Введите строку поиска: ")
+    if user_string.lower() == 'q':
+        break
+
+    list_file = look_for(path_migrations, list_file, user_string)
 
 
 
